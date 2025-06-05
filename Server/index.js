@@ -69,11 +69,7 @@ function handleGETRequest(req, res) {
             writeOkResponse(req, res, RAISED);
             return;
         }
-        throw ErrorPage(
-            404,
-            "Group not found or invalid parameters",
-            "text/plain"
-        );
+        throw ErrorPage(404, "Group not found or invalid parameters", "text/plain");
     }
     if (req.url.startsWith("/unraise")) {
         const uuid = getParam(req.url, "uuid=");
@@ -83,11 +79,7 @@ function handleGETRequest(req, res) {
             writeRedirectResponse(req, res, "/display?uuid=" + uuid);
             return;
         }
-        throw ErrorPage(
-            404,
-            "Group not found or invalid parameters",
-            "text/plain"
-        );
+        throw ErrorPage(404, "Group not found or invalid parameters", "text/plain");
     }
     if (req.url.startsWith("/get_position")) {
         const uuid = getParam(req.url, "uuid=");
@@ -116,7 +108,7 @@ function handleGETRequest(req, res) {
             res,
             DISPLAY.split("{{display}}").join(
                 group.raised
-                    .map((entry) => {
+                    .map(entry => {
                         return `<a href="/unraise?${entry.stuId}">${entry.stuId}</a>`;
                     })
                     .join("")
@@ -156,9 +148,11 @@ function handleGETRequest(req, res) {
     if (req.url == "/favicon.ico") {
         return;
     }
-    if (req.url.startsWith("/static/")) {
+    if (req.url.startsWith("/static")) {
         let filePath = req.url.substring("/static/".length);
+        filePath = "./static/" + filePath; // Ensure the path is relative to the static directory
         filePath = filePath.replace(/\.\./g, ""); // Prevent directory traversal
+        console.log("Static file requested: " + req.url + "  _ ", filePath);
         if (fs.existsSync(filePath)) {
             const fileContent = fs.readFileSync(filePath);
             const contentType = getMIMEType(filePath);
@@ -174,14 +168,7 @@ function handleRequestWithErrorHandling(req, res) {
             writeErrorResponse(req, res);
             return;
         }
-        if (req.url.length > MAX_ENTRY_LENGTH)
-            throw ErrorPage(
-                400,
-                "Maximum param length is reached at " +
-                    MAX_ENTRY_LENGTH +
-                    " chars",
-                "text/plain"
-            );
+        if (req.url.length > MAX_ENTRY_LENGTH) throw ErrorPage(400, "Maximum param length is reached at " + MAX_ENTRY_LENGTH + " chars", "text/plain");
         handleGETRequest(req, res);
     } catch (e) {
         if (e.isErrorPage) {

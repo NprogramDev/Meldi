@@ -1,4 +1,5 @@
 const fs = require("fs");
+const crypto = require("crypto");
 const USER_BASE_FILE = "/data/users.json";
 class UserEntry {
     constructor() {
@@ -37,7 +38,7 @@ class UserEntry {
     }
     serializedRaises() {
         return this.raised
-            .map((entry) => {
+            .map(entry => {
                 return entry.stuId + "\r\n";
             })
             .join("");
@@ -86,11 +87,7 @@ class UserMap {
         return uuid;
     }
     save() {
-        fs.writeFileSync(
-            USER_BASE_FILE,
-            JSON.stringify(this.users, null, 2),
-            "utf8"
-        );
+        fs.writeFileSync(USER_BASE_FILE, JSON.stringify(this.users, null, 2), "utf8");
     }
     load() {
         if (fs.existsSync(USER_BASE_FILE)) {

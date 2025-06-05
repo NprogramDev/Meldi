@@ -4,17 +4,106 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Meldi - Server</title>
+        <style>
+            body,
+            html {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                font-family: Arial, sans-serif;
+            }
+            .header_icon {
+                margin: 10px;
+                height: 100px;
+                width: 100px;
+                margin-left: 1em;
+            }
+            header {
+                background-image: linear-gradient(to right, #4a90e2, #50e3c2);
+                display: flex;
+                color: white;
+            }
+            main {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: start;
+                height: calc(100% - 200px);
+            }
+            footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                background-image: linear-gradient(to right, #4a90e2, #50e3c2);
+                color: white;
+            }
+            .overview_site {
+                margin-top: 2em;
+                margin-left: 2em;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+                border-color: black;
+                border-style: solid;
+                border-width: 1px;
+                border-radius: 5px;
+                padding: 0px;
+            }
+            #newID {
+                padding-top: 2em;
+                padding-bottom: 2em;
+                background-color: gray;
+            }
+        </style>
     </head>
     <body>
         <header>
-            <img src="" />
+            <img src="/static/MeldiIcon.svg" class="header_icon" />
+            <h1>Meldi - Server</h1>
         </header>
         <main>
-            <form action="/display" method="get">
+            <form action="/display" method="get" class="overview_site">
+                <h2>Zur Übersichtsseite:</h2>
                 <label for="uuid">UUID:</label>
                 <input type="text" id="uuid" name="uuid" required />
                 <input type="submit" value="Submit" />
             </form>
+            <div class="overview_site">
+                <script>
+                    function newUser() {
+                        if (document.getElementById("newID").innerText.trim() === "") {
+                            let run = async function () {
+                                let url = await fetch("/getUserId");
+                                document.getElementById("newID").innerText = await url.text();
+                                document.getElementById("infoMessage").style.display = "block";
+                            };
+                            run();
+                        }
+                    }
+                    function copyText() {
+                        let txb = document.getElementById("newID");
+                        navigator.clipboard.writeText(txb.innerText.trim());
+                        document.getElementById("infoMessage").innerText = "Copied!";
+                        txb.style.backgroundColor = "green";
+                        setTimeout(() => {
+                            document.getElementById("infoMessage").innerText = "Click to copy!";
+                            txb.style.backgroundColor = "gray";
+                        }, 2000);
+                    }
+                </script>
+                <h2>Neuer Nutzer:</h2>
+                <p id="newID" onclick="copyText()"></p>
+                <span id="infoMessage" style="display: none">Click to copy!</span>
+                <button onclick="newUser();">New User!</button>
+            </div>
+            <div class="overview_site">
+                <h2>Server Status:</h2>
+                <p>Der Server ist aktuell online.</p>
+            </div>
         </main>
         <footer>
             <p>&copy; 2025 Meldi. All rights reserved.</p>

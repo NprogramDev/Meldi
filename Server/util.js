@@ -29,6 +29,8 @@ module.exports = {
                 return "image/gif";
             case "svg":
                 return "image/svg+xml";
+            case "txt":
+                return "text/plain";
             default:
                 return "application/octet-stream"; // Default for unknown types
         }
