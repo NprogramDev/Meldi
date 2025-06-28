@@ -1,17 +1,202 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Meldi Server</title>
+        <title>Meldi - Server</title>
         <script>
+            const NOTIFY_PERM_ALLOW = "granted";
+            const LOCAL_STORE_NOTIFY_USER = "notify_user";
+
+            const TEXT_MSG_BOX_INTERFIX = " hat sich gemeldet ";
+
+            function isNotifyAllowed() {
+                return Notification.permission === "granted" && localStorage.getItem(LOCAL_STORE_NOTIFY_USER) === "true";
+            }
+            function notifyUser(msg) {
+                const notification = new Notification(msg);
+            }
+            function notifyOfStudent(stu) {
+                if (stu.trim() === "") return;
+                let userText = "";
+                stu = stu.split("&");
+                let name = "";
+                let pc = "";
+                for (let o of stu) {
+                    if (o.startsWith("user=")) {
+                        name = o.split("=")[1];
+                    }
+                    if (o.startsWith("device=")) {
+                        pc = o.split("=")[1];
+                    }
+                }
+                notifyUser(name + TEXT_MSG_BOX_INTERFIX + pc);
+            }
+            function checkAll() {
+                if (!confirm("Wirklich alle abharken?")) return;
+                let a = document.getElementsByTagName("main")[0].getElementsByTagName("a");
+                for (let i = 0; i < a.length; i++) {
+                    fetch(a[i].href);
+                }
+            }
+
+            let notes = [];
+            for (let el of notes) {
+                notifyOfStudent(el);
+            }
+        </script>
+        <style>
+            body,
+            html {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                font-family: Arial, sans-serif;
+            }
+            .header_icon {
+                margin: 10px;
+                height: 100px;
+                width: 100px;
+                margin-left: 1em;
+            }
+            header {
+                background-image: linear-gradient(to right, #4a90e2, #50e3c2);
+                display: flex;
+                color: white;
+            }
+            main {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: start;
+                height: calc(100% - 200px);
+            }
+            footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                background-image: linear-gradient(to right, #4a90e2, #50e3c2);
+                color: white;
+            }
+            .overview_site {
+                margin-top: 2em;
+                margin-left: 2em;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+                border-color: black;
+                border-style: solid;
+                border-width: 1px;
+                border-radius: 5px;
+                padding: 0px;
+            }
+            .overview_site a {
+                margin: 3em;
+            }
+            #newID {
+                padding-top: 2em;
+                padding-bottom: 2em;
+                background-color: gray;
+            }
+            .switch_outer {
+                float: right;
+                display: flex;
+                width: 6em;
+                height: 3em;
+                border-radius: 2em;
+                background-color: #f00;
+                margin-top: 0.5em;
+            }
+            .switch_inner {
+                display: flex;
+                width: 3em;
+                max-height: 3em;
+                border-radius: 2em;
+                border-style: solid;
+                border-width: 1px;
+                background-color: #fff;
+                color: black;
+                font-weight: bolder;
+                font-family: "Courier New", Courier, monospace;
+                font-size: large;
+                justify-content: center;
+                align-items: center;
+            }
+            .notification_switch {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 20em;
+                height: 100%;
+                flex-direction: column;
+                margin-left: 2em;
+                font-weight: bold;
+                padding-top: 1em;
+            }
+            button,
+            input[type="submit"] {
+                min-width: 7em;
+                min-height: 5em;
+                font-weight: bold;
+                background-color: rgba(0, 0, 0, 0);
+                margin-bottom: 0.5em;
+                margin-top: 0.5em;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <a href="/" style="display: flex; width: fit-content; height: fit-content; text-decoration: none; color: white">
+                <img src="/static/MeldiIcon.svg" class="header_icon" />
+                <h1>Meldi - Server</h1>
+            </a>
+            <div class="notification_switch">
+                Benachrichtigungen:
+                <div onclick="clickPerm()" class="switch_outer"><div id="permission_switch" class="switch_inner">I</div></div>
+            </div>
+            <script>
+                let psw = document.getElementById("permission_switch");
+                function updatePermission() {
+                    const condition = isNotifyAllowed();
+                    psw.style.marginLeft = condition ? "3em" : "0px";
+                    psw.parentElement.style.backgroundColor = condition ? "#0f0" : "#f00";
+                    psw.innerText = condition ? "I" : "O";
+                }
+                function clickPerm() {
+                    if (Notification.permission !== "granted") Notification.requestPermission();
+                    localStorage.setItem(LOCAL_STORE_NOTIFY_USER, localStorage.getItem(LOCAL_STORE_NOTIFY_USER) === "false" ? "true" : "false");
+                    updatePermission();
+                }
+                updatePermission();
+            </script>
+        </header>
+        <main>
+            <div class="overview_site">
+                <h2>Sich meldende Sch&uuml;ler</h2>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>PC</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    {{display}}
+                </table>
+                <button style="margin-top: 10em" onclick="checkAll();">Alle Abharken</button>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2025 Meldi.</p>
+            <p>Kontakt: <a href="mailto:"></a></p>
+        </footer>
+        <script>
+            //Auto-Reload
             setTimeout(() => {
                 window.location.reload();
             }, 5000);
         </script>
-    </head>
-    <body>
-        <h1>Raised Meldis</h1>
-        <div>{{display}}</div>
     </body>
 </html>

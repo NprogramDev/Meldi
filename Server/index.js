@@ -109,10 +109,20 @@ function handleGETRequest(req, res) {
             DISPLAY.split("{{display}}").join(
                 group.raised
                     .map(entry => {
-                        return `<a href="/unraise?${entry.stuId}">${entry.stuId}</a>`;
+			let a = entry.stuId.split("&");
+                        let name = "-NoName-", pc = "-!NoName-";
+                        for(let b of a){
+                          if(b.startsWith("user=")){
+                             name = b.split("=")[1];
+                          }
+                          if(b.startsWith("device=")){
+                             pc = b.split("=")[1];
+                          }
+                        }
+                        return `<tr><td>${name}</td><td>${pc}</td><td><a href="/unraise?${entry.stuId}">&check;</a></td></tr>`;
                     })
                     .join("")
-            ),
+            ).split("{{notify}}").join("[ \""+group.getNotifications().join("\",\"") + "\"]"),
             "text/html"
         );
         return;

@@ -6,6 +6,7 @@ class UserEntry {
         this._expireTime = 0;
         this.timeOfDeath = 0;
         this.raised = [];
+        this.notifBuffer = [];
     }
     get expireTime() {
         return this._expireTime;
@@ -25,6 +26,8 @@ class UserEntry {
         return -1;
     }
     raise(stuId) {
+        if(this.notifBuffer.indexOf(stuId) === -1) this.notifBuffer.push(stuId);
+        if(this.raised.find(elm => stuId == elm.stuId)) return;
         this.raised.push({
             stuId: stuId,
             time: Date.now(),
@@ -33,8 +36,15 @@ class UserEntry {
     unraise(student) {
         const index = this.indexOfStudent(student);
         if (index === -1) return false;
+        const buffidx = this.notifBuffer.indexOf(student);
+        if(buffidx != -1) this.notifBuffer.splice(buffidx,1);
         this.raised.splice(index, 1);
         return true;
+    }
+    getNotifications(){
+        let newObj = this.notifBuffer.slice();
+        this.notifBuffer = [];
+        return newObj;
     }
     serializedRaises() {
         return this.raised
