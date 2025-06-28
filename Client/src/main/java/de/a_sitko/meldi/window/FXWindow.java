@@ -12,7 +12,6 @@ import javafx.stage.StageStyle;
 
 public class FXWindow extends Application {
     private static final String STYLE_CSS_FX = "-fx-background-color: transparent;";
-
     Main main;
     Scene scene;
     @Override
@@ -36,10 +35,7 @@ public class FXWindow extends Application {
         main.start();
     }
     public static void main(String[] args){
+        Runtime.getRuntime().addShutdownHook(new Main.OnShut());
         launch(args);
-    }
-    @Override
-    public void stop(){
-        main.destroy();
     }
 }

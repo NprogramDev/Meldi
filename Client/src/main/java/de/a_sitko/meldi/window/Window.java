@@ -38,7 +38,4 @@ public class Window extends VBox {
     private void append(Node a){
         this.getChildren().add(a);
     }
-    private void close(){
-        System.exit(0);
-    }
 }

@@ -1,6 +1,7 @@
 package de.a_sitko.meldi;
 
 import de.a_sitko.meldi.window.EditLine;
+import de.a_sitko.meldi.window.FXWindow;
 import de.a_sitko.meldi.window.Stats;
 import de.a_sitko.meldi.window.StudentList;
 import javafx.application.Platform;
@@ -113,5 +114,12 @@ public class Main extends Thread {
 
     public void setEditLine(EditLine editLine) {
         this.editLine = editLine;
+    }
+
+    /**
+     * Needed for packaging the java app into a jar file!
+     */
+    public static void main(String[] args){
+        FXWindow.main(args);
     }
 }

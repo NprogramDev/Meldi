@@ -13,7 +13,7 @@ public class API {
     static final String UNRAISE = "/unraise";
     static final String ENTRIES_FOR_ID= "/entriesForID";
     static final String EXPIRE_TIME = "/expiresOn";
-    static final float VERSION = 1.0f;
+    static final float VERSION = 0.1f;
     static final String DELIMITER_READ_ALL = "\\A";
     static final Map<String,String> EMPTY_PARAMS = new HashMap<>();
     private Map<String,String> currentParams = new HashMap<>();
