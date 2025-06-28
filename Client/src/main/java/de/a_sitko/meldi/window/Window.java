@@ -3,6 +3,7 @@ package de.a_sitko.meldi.window;
 import de.a_sitko.meldi.Main;
 import de.a_sitko.meldi.Texts;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -19,21 +20,31 @@ public class Window extends VBox {
     public Window(Main main){
         super();
         this.setAlignment(Pos.TOP_CENTER);
+
         editLine = new EditLine(main);
-        editLine.setMinSize(main.WINDOW_WIDTH,main.WINDOW_HEIGHT * 0.1);
         stats = new Stats(main);
-        stats.setMinSize(main.WINDOW_WIDTH,main.WINDOW_HEIGHT * 0.4);
-        main.setStats(stats);
         raise = new Button(Texts.RAISE);
+
+        editLine.setMinSize(main.WINDOW_WIDTH,main.WINDOW_HEIGHT * 0.1);
+        stats.setMinSize(main.WINDOW_WIDTH,main.WINDOW_HEIGHT * 0.4);
         raise.setMinSize(main.WINDOW_WIDTH,main.WINDOW_HEIGHT * 0.5);
-        main.setRaiseButton(raise);
+
         raise.setOnAction(e -> main.updateHand());
-        Font f = raise.getFont();
-        f = new Font(f.getFamily(),15);
-        raise.setFont(f);
+
+        setRaiseButtonStyle(raise);
+        raise.setCursor(Cursor.HAND);
+
+        main.setStats(stats);
+        main.setRaiseButton(raise);
+
         append(editLine);
         append(stats);
         append(raise);
+    }
+    private void setRaiseButtonStyle(Button button){
+        button.setStyle("""
+    -fx-text-fill: black;
+    -fx-font-size: 16px;""");
     }
     private void append(Node a){
         this.getChildren().add(a);

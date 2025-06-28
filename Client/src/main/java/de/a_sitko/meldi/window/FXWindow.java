@@ -23,7 +23,7 @@ public class FXWindow extends Application {
         // Transparent text overlay
         main.setStage(stage);
         Window w = new Window(main);
-        stage.setX(Screen.getPrimary().getBounds().getWidth()-main.WINDOW_WIDTH);
+        stage.setX(Screen.getPrimary().getBounds().getWidth() - main.WINDOW_WIDTH);
         stage.setY(100);
         scene = new Scene(w, main.WINDOW_WIDTH, main.WINDOW_HEIGHT, Color.WHEAT);
         stage.initStyle(StageStyle.TRANSPARENT);
@@ -34,6 +34,7 @@ public class FXWindow extends Application {
         stage.show();
         main.start();
     }
+
     public static void main(String[] args){
         Runtime.getRuntime().addShutdownHook(new Main.OnShut());
         launch(args);
