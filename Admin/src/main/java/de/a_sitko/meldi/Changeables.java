@@ -3,6 +3,6 @@ package de.a_sitko.meldi;
 import java.util.UUID;
 
 public class Changeables {
-    public static final String BASE_URL = "http://localhost:5321";
-    public static final String USER_UUID = "21cab1e0-2ce2-40f9-bbb2-7ed233196675-2d04a2f4-22c2-4c31-be72-8d40b103ea82";
+    public static final String BASE_URL = "https://meldi.nprogramdev.com";
+    public static final String USER_UUID = "c065fa0d-a74c-4723-8fb3-a0eea0d8f17b-f2ef7f77-aa06-4aea-b36b-767dd2886df9";
 }
