@@ -69,7 +69,11 @@ function handleGETRequest(req, res) {
             writeOkResponse(req, res, RAISED);
             return;
         }
-        throw ErrorPage(404, "Group not found or invalid parameters", "text/plain");
+        throw ErrorPage(
+            404,
+            "Group not found or invalid parameters " + uuid,
+            "text/plain"
+        );
     }
     if (req.url.startsWith("/unraise")) {
         const uuid = getParam(req.url, "uuid=");
@@ -79,7 +83,11 @@ function handleGETRequest(req, res) {
             writeRedirectResponse(req, res, "/display?uuid=" + uuid);
             return;
         }
-        throw ErrorPage(404, "Group not found or invalid parameters", "text/plain");
+        throw ErrorPage(
+            404,
+            "Group not found or invalid parameters",
+            "text/plain"
+        );
     }
     if (req.url.startsWith("/get_position")) {
         const uuid = getParam(req.url, "uuid=");
@@ -93,7 +101,12 @@ function handleGETRequest(req, res) {
     if (req.url.startsWith("/entriesForID")) {
         const uuid = getParam(req.url, "uuid=");
         const group = userMap.get(uuid);
-        if (!group) throw ErrorPage(403, '<h1 style="color: red; font-weight: bold;"> This UUID is blocked! No not use! </h1>', "text/html");
+        if (!group)
+            throw ErrorPage(
+                403,
+                '<h1 style="color: red; font-weight: bold;"> This UUID is blocked! No not use! </h1>',
+                "text/html"
+            );
         writeOkResponse(req, res, group.serializedRaises());
         return;
     }
@@ -110,7 +123,7 @@ function handleGETRequest(req, res) {
             DISPLAY.split("{{display}}")
                 .join(
                     group.raised
-                        .map(entry => {
+                        .map((entry) => {
                             let a = entry.stuId.split("&");
                             let name = "-NoName-",
                                 pc = "-!NoName-";
@@ -183,7 +196,14 @@ function handleRequestWithErrorHandling(req, res) {
             writeErrorResponse(req, res);
             return;
         }
-        if (req.url.length > MAX_ENTRY_LENGTH) throw ErrorPage(400, "Maximum param length is reached at " + MAX_ENTRY_LENGTH + " chars", "text/plain");
+        if (req.url.length > MAX_ENTRY_LENGTH)
+            throw ErrorPage(
+                400,
+                "Maximum param length is reached at " +
+                    MAX_ENTRY_LENGTH +
+                    " chars",
+                "text/plain"
+            );
         handleGETRequest(req, res);
     } catch (e) {
         if (e.isErrorPage) {
