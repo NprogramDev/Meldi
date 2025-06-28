@@ -7,7 +7,7 @@ Information-request for DigitaL Education of Minors
 */
 const http = require("http");
 const fs = require("fs");
-const { userMap } = require("./user.js");
+const { userMap, BLOCKED_UUID } = require("./user.js");
 const { YEAR, getMIMEType } = require("./util.js");
 //
 const MAX_ENTRY_LENGTH = 200;
@@ -93,12 +93,13 @@ function handleGETRequest(req, res) {
     if (req.url.startsWith("/entriesForID")) {
         const uuid = getParam(req.url, "uuid=");
         const group = userMap.get(uuid);
-        if (!group) throw ErrorPage(404, "Group not found", "text/plain");
+        if (!group) throw ErrorPage(403, '<h1 style="color: red; font-weight: bold;"> This UUID is blocked! No not use! </h1>', "text/html");
         writeOkResponse(req, res, group.serializedRaises());
         return;
     }
     if (req.url.startsWith("/display")) {
         const uuid = getParam(req.url, "uuid=");
+        if (uuid === BLOCKED_UUID) throw ErrorPage();
         const group = userMap.get(uuid);
         if (!group) {
             throw ErrorPage(404, "Not Found", "text/plain");
@@ -106,23 +107,27 @@ function handleGETRequest(req, res) {
         writeOkResponse(
             req,
             res,
-            DISPLAY.split("{{display}}").join(
-                group.raised
-                    .map(entry => {
-			let a = entry.stuId.split("&");
-                        let name = "-NoName-", pc = "-!NoName-";
-                        for(let b of a){
-                          if(b.startsWith("user=")){
-                             name = b.split("=")[1];
-                          }
-                          if(b.startsWith("device=")){
-                             pc = b.split("=")[1];
-                          }
-                        }
-                        return `<tr><td>${name}</td><td>${pc}</td><td><a href="/unraise?${entry.stuId}">&check;</a></td></tr>`;
-                    })
-                    .join("")
-            ).split("{{notify}}").join("[ \""+group.getNotifications().join("\",\"") + "\"]"),
+            DISPLAY.split("{{display}}")
+                .join(
+                    group.raised
+                        .map(entry => {
+                            let a = entry.stuId.split("&");
+                            let name = "-NoName-",
+                                pc = "-!NoName-";
+                            for (let b of a) {
+                                if (b.startsWith("user=")) {
+                                    name = b.split("=")[1];
+                                }
+                                if (b.startsWith("device=")) {
+                                    pc = b.split("=")[1];
+                                }
+                            }
+                            return `<tr><td>${name}</td><td>${pc}</td><td><a href="/unraise?${entry.stuId}">&check;</a></td></tr>`;
+                        })
+                        .join("")
+                )
+                .split("{{notify}}")
+                .join('[ "' + group.getNotifications().join('","') + '"]'),
             "text/html"
         );
         return;

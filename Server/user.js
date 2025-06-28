@@ -1,6 +1,7 @@
 const fs = require("fs");
 const crypto = require("crypto");
 const USER_BASE_FILE = "/data/users.json";
+const BLOCKED_UUID = "c065fa0d-a74c-4723-8fb3-a0eea0d8f17b-f2ef7f77-aa06-4aea-b36b-767dd2886df9";
 class UserEntry {
     constructor() {
         this._expireTime = 0;
@@ -26,8 +27,8 @@ class UserEntry {
         return -1;
     }
     raise(stuId) {
-        if(this.notifBuffer.indexOf(stuId) === -1) this.notifBuffer.push(stuId);
-        if(this.raised.find(elm => stuId == elm.stuId)) return;
+        if (this.notifBuffer.indexOf(stuId) === -1) this.notifBuffer.push(stuId);
+        if (this.raised.find(elm => stuId == elm.stuId)) return;
         this.raised.push({
             stuId: stuId,
             time: Date.now(),
@@ -37,11 +38,11 @@ class UserEntry {
         const index = this.indexOfStudent(student);
         if (index === -1) return false;
         const buffidx = this.notifBuffer.indexOf(student);
-        if(buffidx != -1) this.notifBuffer.splice(buffidx,1);
+        if (buffidx != -1) this.notifBuffer.splice(buffidx, 1);
         this.raised.splice(index, 1);
         return true;
     }
-    getNotifications(){
+    getNotifications() {
         let newObj = this.notifBuffer.slice();
         this.notifBuffer = [];
         return newObj;
@@ -78,6 +79,7 @@ class UserMap {
         }
     }
     get(uuid) {
+        if (uuid === BLOCKED_UUID) return null;
         if (!this.users[uuid]) {
             return null;
         }
@@ -120,4 +122,5 @@ module.exports = {
     UserEntry,
     UserMap,
     userMap,
+    BLOCKED_UUID,
 };
