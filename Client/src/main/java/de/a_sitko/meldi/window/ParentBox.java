@@ -5,11 +5,17 @@
  * Only use this under the licence given
  * @author NprogramDev (nprogramdev@gmail.com)
  */
-package de.a_sitko.meldi;
+package de.a_sitko.meldi.window;
 
-import java.util.UUID;
+import javafx.scene.Node;
 
-public class Changeables {
-    public static final String BASE_URL = "https://meldi.nprogramdev.com";
-    public static String USER_UUID = "c065fa0d-a74c-4723-8fb3-a0eea0d8f17b-f2ef7f77-aa06-4aea-b36b-767dd2886df9";
+/**
+ * Why is this not in javafx?
+ */
+public interface ParentBox {
+    /**
+     * Adds a child to the javafx box
+     * @param child The child
+     */
+    void append(Node child);
 }
