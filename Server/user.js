@@ -1,7 +1,8 @@
 const fs = require("fs");
 const crypto = require("crypto");
 const USER_BASE_FILE = "/data/users.json";
-const BLOCKED_UUID = "c065fa0d-a74c-4723-8fb3-a0eea0d8f17b-f2ef7f77-aa06-4aea-b36b-767dd2886df9";
+const BLOCKED_UUID =
+    "c065fa0d-a74c-4723-8fb3-a0eea0d8f17b-f2ef7f77-aa06-4aea-b36b-767dd2886df9";
 class UserEntry {
     constructor() {
         this._expireTime = 0;
@@ -27,8 +28,9 @@ class UserEntry {
         return -1;
     }
     raise(stuId) {
-        if (this.notifBuffer.indexOf(stuId) === -1) this.notifBuffer.push(stuId);
-        if (this.raised.find(elm => stuId == elm.stuId)) return;
+        if (this.notifBuffer.indexOf(stuId) === -1)
+            this.notifBuffer.push(stuId);
+        if (this.raised.find((elm) => stuId == elm.stuId)) return;
         this.raised.push({
             stuId: stuId,
             time: Date.now(),
@@ -49,7 +51,7 @@ class UserEntry {
     }
     serializedRaises() {
         return this.raised
-            .map(entry => {
+            .map((entry) => {
                 return entry.stuId + "\r\n";
             })
             .join("");
@@ -99,18 +101,24 @@ class UserMap {
         return uuid;
     }
     save() {
-        fs.writeFileSync(USER_BASE_FILE, JSON.stringify(this.users, null, 2), "utf8");
+        fs.writeFileSync(
+            USER_BASE_FILE,
+            JSON.stringify(this.users, null, 2),
+            "utf8"
+        );
     }
     load() {
         if (fs.existsSync(USER_BASE_FILE)) {
             let fileUsers = JSON.parse(fs.readFileSync(USER_BASE_FILE, "utf8"));
-            console.log("Loaded user data from file.", this.users);
+
             for (let val of Object.keys(fileUsers)) {
                 const entry = new UserEntry();
                 entry.initWithConfig(fileUsers[val]);
                 entry.expireTime = Date.now() + this.uuidDeath;
                 this.users[val] = entry;
             }
+            console.log("Loaded user data from file.", this.users);
+            this.save();
         } else {
             this.users = {};
             this.save();

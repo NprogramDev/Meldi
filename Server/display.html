@@ -33,7 +33,7 @@
                 notifyUser(name + TEXT_MSG_BOX_INTERFIX + pc);
             }
             function checkAll() {
-                if (!confirm("Wirklich alle abharken?")) return;
+                if (!confirm("Wirklich alle abhaken?")) return;
                 let a = document.getElementsByTagName("main")[0].getElementsByTagName("a");
                 for (let i = 0; i < a.length; i++) {
                     fetch(a[i].href);
