@@ -33,14 +33,14 @@
                 notifyUser(name + TEXT_MSG_BOX_INTERFIX + pc);
             }
             function checkAll() {
-                if (!confirm("Wirklich alle abharken?")) return;
+                if (!confirm("Wirklich alle abhaken?")) return;
                 let a = document.getElementsByTagName("main")[0].getElementsByTagName("a");
                 for (let i = 0; i < a.length; i++) {
                     fetch(a[i].href);
                 }
             }
 
-            let notes = [];
+            let notes = {{notify}};
             for (let el of notes) {
                 notifyOfStudent(el);
             }
@@ -150,25 +150,45 @@
     </head>
     <body>
         <header>
-            <a href="/" style="display: flex; width: fit-content; height: fit-content; text-decoration: none; color: white">
+            <a
+                href="/"
+                style="
+                    display: flex;
+                    width: fit-content;
+                    height: fit-content;
+                    text-decoration: none;
+                    color: white;
+                "
+            >
                 <img src="/static/MeldiIcon.svg" class="header_icon" />
                 <h1>Meldi - Server</h1>
             </a>
             <div class="notification_switch">
                 Benachrichtigungen:
-                <div onclick="clickPerm()" class="switch_outer"><div id="permission_switch" class="switch_inner">I</div></div>
+                <div onclick="clickPerm()" class="switch_outer">
+                    <div id="permission_switch" class="switch_inner">I</div>
+                </div>
             </div>
             <script>
                 let psw = document.getElementById("permission_switch");
                 function updatePermission() {
                     const condition = isNotifyAllowed();
                     psw.style.marginLeft = condition ? "3em" : "0px";
-                    psw.parentElement.style.backgroundColor = condition ? "#0f0" : "#f00";
+                    psw.parentElement.style.backgroundColor = condition
+                        ? "#0f0"
+                        : "#f00";
                     psw.innerText = condition ? "I" : "O";
                 }
                 function clickPerm() {
-                    if (Notification.permission !== "granted") Notification.requestPermission();
-                    localStorage.setItem(LOCAL_STORE_NOTIFY_USER, localStorage.getItem(LOCAL_STORE_NOTIFY_USER) === "false" ? "true" : "false");
+                    if (Notification.permission !== "granted")
+                        Notification.requestPermission();
+                    localStorage.setItem(
+                        LOCAL_STORE_NOTIFY_USER,
+                        localStorage.getItem(LOCAL_STORE_NOTIFY_USER) ===
+                            "false"
+                            ? "true"
+                            : "false"
+                    );
                     updatePermission();
                 }
                 updatePermission();
@@ -185,7 +205,9 @@
                     </tr>
                     {{display}}
                 </table>
-                <button style="margin-top: 10em" onclick="checkAll();">Alle Abharken</button>
+                <button style="margin-top: 10em" onclick="checkAll();">
+                    Alle Abhaken
+                </button>
             </div>
         </main>
         <footer>

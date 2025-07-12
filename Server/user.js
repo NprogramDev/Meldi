@@ -185,13 +185,15 @@ class UserMap {
     load() {
         if (fs.existsSync(USER_BASE_FILE)) {
             let fileUsers = JSON.parse(fs.readFileSync(USER_BASE_FILE, "utf8"));
-            console.log("Loaded user data from file.", this.users);
+
             for (let val of Object.keys(fileUsers)) {
                 const entry = new UserEntry();
                 entry.initWithConfig(fileUsers[val]);
                 entry.timeOfDeath = Date.now() + this.uuidDeath;
                 this.users[val] = entry;
             }
+            console.log("Loaded user data from file.", this.users);
+            this.save();
         } else {
             //No config file, no users. Just create one
             this.users = {};
