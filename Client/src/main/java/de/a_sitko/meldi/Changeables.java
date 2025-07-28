@@ -11,5 +11,5 @@ import java.util.UUID;
 
 public class Changeables {
     public static final String BASE_URL = "https://meldi.nprogramdev.com";
-    public static String USER_UUID = "c065fa0d-a74c-4723-8fb3-a0eea0d8f17b-f2ef7f77-aa06-4aea-b36b-767dd2886df9";
+    public static String USER_UUID = "c6f70e62-5f21-4b56-9dbd-31bdd744518e-09e1083e-bab9-4958-9974-c75488d3711d";
 }

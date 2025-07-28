@@ -7,6 +7,8 @@
  */
 package de.a_sitko.meldi;
 
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.NativeHookException;
 import de.a_sitko.meldi.window.FXWindow;
 import de.a_sitko.meldi.window.Stats;
 import javafx.application.Platform;
@@ -88,6 +90,14 @@ public class Main extends Thread {
      */
     private Label connectionLabel;
     /**
+     * The offset between mouse and window when moved
+     */
+    private int moveXOffset = 0,moveYOffset = 0;
+    /**
+     * The mouse position on screen
+     */
+    private int mousePositionX = 0,mousePositionY =0;
+    /**
      * The only main instance
      */
     private static Main instance;
@@ -109,6 +119,16 @@ public class Main extends Thread {
         param_uuid = Changeables.USER_UUID;
         // Set the three core params for the network api to register
         api.setUserID(param_device, param_name, param_uuid);
+        //
+        try {
+            GlobalScreen.registerNativeHook();
+        }
+        catch (NativeHookException ex) {
+            System.exit(1);
+        }
+
+        GlobalScreen.addNativeMouseListener(new MouseOnScreen(this));
+        GlobalScreen.addNativeMouseMotionListener(new MouseOnScreen(this));
     }
 
 
@@ -148,6 +168,44 @@ public class Main extends Thread {
         if (position == 0) raiseButton.setText(Texts.READY);
     }
 
+    /**
+     * Start the window moving process, with the cursor offset
+     */
+    public void startMove(){
+        int wndX = (int) this.stage.getX();
+        int wndY = (int) this.stage.getY();
+        this.moveXOffset = mousePositionX-wndX;
+        this.moveYOffset = mousePositionY-wndY;
+        System.out.println(wndX + "  " + mousePositionX);
+    }
+
+    /**
+     * @return Is the window currently moving
+     */
+    public boolean isMoving(){
+        return moveXOffset != 0;
+    }
+
+    /**
+     * Stops the moving process of the window
+     */
+    public void stopMoving(){
+        this.moveXOffset =0;
+        this.moveYOffset =0;
+    }
+
+    /**
+     * @return The X Offset between mouse and window when moved; 0 if not moved
+     */
+    public int getMoveXOffset(){
+        return this.moveXOffset;
+    }
+    /**
+     * @return The Y Offset between mouse and window when moved
+     */
+    public int getMoveYOffset(){
+        return this.moveYOffset;
+    }
     /**
      * Sets a connection label of the App
      * @param connected The connection status of the App
@@ -286,6 +344,25 @@ public class Main extends Thread {
     */
     public static void main(String[] args){
         FXWindow.main(args);
+    }
+
+    /**
+     * @return
+     */
+    public int getMousePositionX() {
+        return mousePositionX;
+    }
+
+    public void setMousePositionX(int mousePositionX) {
+        this.mousePositionX = mousePositionX;
+    }
+
+    public int getMousePositionY() {
+        return mousePositionY;
+    }
+
+    public void setMousePositionY(int mousePositionY) {
+        this.mousePositionY = mousePositionY;
     }
 
     /**
