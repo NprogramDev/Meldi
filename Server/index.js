@@ -17,8 +17,19 @@ const RAISED = "true";
 const UNRAISED = "false";
 const DISPLAY = fs.readFileSync("display.html").toString();
 const VERSION = "1.0";
-
+const SERVER_VERSION = 1.0
+let lastUpdateCheck = 0;
+let upToDate = false;
 userMap.setUUIDDeath(0.5 * YEAR);
+
+async function updateCheck(){
+	let data = await fetch("https://raw.githubusercontent.com/NprogramDev/Meldi/refs/heads/main/version.json");
+        data = await data.json();
+        upToDate = data["Server-Version"] == SERVER_VERSION;
+        lastUpdateCheck = Date.now();
+        if(!upToDate) {console.warn("Server not up to date!");} else console.log("Server up to date!")
+}
+updateCheck();
 
 function writeErrorResponse(req, res) {
     res.statusCode = 405; // Method Not Allowed
@@ -117,11 +128,12 @@ function handleGETRequest(req, res) {
         if (!group) {
             throw ErrorPage(404, "Not Found", "text/plain");
         }
+        if(Date.now() - lastUpdateCheck > 21600000) updateCheck();
         writeOkResponse(
             req,
             res,
             DISPLAY.split("{{display}}")
-                .join(
+                .join(((!upToDate) ? "-- Server not up to date! Please contact admin! --" : "") +
                     group.raised
                         .map((entry) => {
                             let a = entry.stuId.split("&");
@@ -137,8 +149,7 @@ function handleGETRequest(req, res) {
                             }
                             return `<tr><td>${name}</td><td>${pc}</td><td><a href="/unraise?${entry.stuId}">&check;</a></td></tr>`;
                         })
-                        .join("")
-                )
+                        .join(""))
                 .split("{{notify}}")
                 .join('[ "' + group.getNotifications().join('","') + '"]'),
             "text/html"
