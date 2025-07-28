@@ -6,7 +6,7 @@
 
     <groupId>de.a_sitko.meldi</groupId>
     <artifactId>Meldi</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.0-BETA</version>
 
     <properties>
         <maven.compiler.source>19</maven.compiler.source>

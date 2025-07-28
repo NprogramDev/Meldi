@@ -37,7 +37,7 @@ public class API {
     /**
      * The version of the server to be accepted without a problem
      */
-    static final float VERSION = 0.1f;
+    static final float VERSION = 1.0f;
     /**
      * The read all parameter for a stream to read all bytes
      */

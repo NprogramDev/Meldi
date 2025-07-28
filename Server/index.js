@@ -16,7 +16,7 @@ const MAX_ENTRY_COUNT = 70;
 const RAISED = "true";
 const UNRAISED = "false";
 const DISPLAY = fs.readFileSync("display.html").toString();
-const VERSION = "0.1";
+const VERSION = "1.0";
 
 userMap.setUUIDDeath(0.5 * YEAR);
 
