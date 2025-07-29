@@ -55,8 +55,11 @@ public class FXWindow extends Application {
         Window w = new Window(main); // Create the Main window box with everything in it
         // Set the pos of the outside window to the upper right corner, with space to close windows
         int[] pos = Config.getInstance().screen_position;
-        if(pos[0] < 0 ) pos[0] = (int)Screen.getPrimary().getBounds().getWidth() + pos[0];
-        if(pos[1] < 0 ) pos[1] = (int)Screen.getPrimary().getBounds().getWidth() + pos[1];
+        if(pos[0] < 0 ) pos[0] = (int)Screen.getPrimary().getBounds().getWidth() + pos[0] - main.WINDOW_WIDTH;
+        if(pos[1] < 0 ) pos[1] = (int)Screen.getPrimary().getBounds().getWidth() + pos[1] - main.WINDOW_HEIGHT;
+        stage.setX(pos[0]);
+        stage.setY(pos[1]);
+        System.out.println("Pos: " + pos[0]  + "  " + pos[1]);
         // Create the scene on which everything appends to.
         scene = new Scene(w, main.WINDOW_WIDTH, main.WINDOW_HEIGHT, Color.WHEAT);
         stage.initStyle(StageStyle.TRANSPARENT); // Make the scene invisible.

@@ -6,10 +6,10 @@ import java.io.InputStreamReader;
 import java.util.Objects;
 
 public class Config {
-    private static final String SERVER_DOMAIN = "server_domain: ";
-    private static final String USER_UUID = "user_uuid: ";
-    private static final String SCREEN_POS = "screen_pos: ";
-    private static final String ALLOW_WINDOW_MOVE = "allow_window_move: ";
+    private static final String SERVER_DOMAIN = "server_domain";
+    private static final String USER_UUID = "user_uuid";
+    private static final String SCREEN_POS = "screen_pos";
+    private static final String ALLOW_WINDOW_MOVE = "allow_window_move";
     private static Config inst;
     public static Config getInstance(){
         if(inst == null) inst = new Config();
@@ -32,6 +32,7 @@ public class Config {
                 while ((line = reader.readLine()) != null) {
                     String[] p = line.split(":",2);
                     if(p.length != 2) continue;
+                    System.out.println("ABC + " + p[0] + " DEF " + p[1] );
                     p[0] = p[0].trim();
                     p[1] = p[1].trim();
                     switch (p[0]){

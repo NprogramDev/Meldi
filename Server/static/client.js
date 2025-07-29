@@ -1,6 +1,7 @@
 const JAR_FILE_INDEX = "/static/dist/index.json";
 const NEW_USER_API = "/getUserId";
-const IN_JAR_FILE_LOCATION = "de/a_sitko/meldi/Changeables.class";
+const IN_JAR_FILE_LOCATION = "de/a_sitko/meldi/config.yaml";
+const BASE_DOMAIN = "https://meldi.nprogramdev.com";
 const BASE_UUID = "c065fa0d-a74c-4723-8fb3-a0eea0d8f17b-f2ef7f77-aa06-4aea-b36b-767dd2886df9";
 const JUST_A_FILE_NAME = "conf.meldi.json";
 const WAIT_TEXT = "Bitte warten...";
@@ -75,12 +76,9 @@ async function jarFileChanger(path, uuid) {
         alert("Changeables.class not found in ZIP.");
         return;
     }
-    const encoder = new TextEncoder();
-
-    const searchString = encoder.encode(BASE_UUID);
-    const newUUIDString = encoder.encode(uuid);
-    let binaryData = await changeFile.async("uint8array");
-    binaryData = replaceBytes(binaryData, searchString, newUUIDString);
+    let binaryData = await changeFile.async("string");
+    binaryData = binaryData.replaceAll(BASE_UUID, uuid);
+    binaryData = binaryData.replaceAll(BASE_DOMAIN, location.origin);
     zip.file(IN_JAR_FILE_LOCATION, binaryData);
     const newZipBlob = await zip.generateAsync({ type: "blob" });
     let filename = path.split("/").pop();

@@ -7,6 +7,7 @@
  */
 package de.a_sitko.meldi.window;
 
+import de.a_sitko.meldi.Config;
 import de.a_sitko.meldi.Main;
 import de.a_sitko.meldi.Texts;
 import javafx.application.Platform;
@@ -78,11 +79,12 @@ public class EditLine extends HBox implements ParentBox {
         title.setMinWidth(main.WINDOW_WIDTH * 0.5);
         // Update the visibility of the stats sync to the window
         Platform.runLater(()->{
-            toggleStatsVisibility();
+            if(main.getStats() != null)
+                toggleStatsVisibility();
         });
         // Append everything
         append(title);
-        append(moveButton);
+        if(Config.getInstance().allow_window_move)append(moveButton);
         append(closeStates);
         append(pinOnWindow);
         append(exit);
