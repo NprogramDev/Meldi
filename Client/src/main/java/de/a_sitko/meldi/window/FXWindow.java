@@ -7,6 +7,7 @@
  */
 package de.a_sitko.meldi.window;
 
+import de.a_sitko.meldi.Config;
 import de.a_sitko.meldi.Main;
 import de.a_sitko.meldi.Texts;
 import javafx.application.Application;
@@ -53,8 +54,9 @@ public class FXWindow extends Application {
         main.setStage(stage); // Make the stage accessible everywhere from Main and for Main
         Window w = new Window(main); // Create the Main window box with everything in it
         // Set the pos of the outside window to the upper right corner, with space to close windows
-        stage.setX(Screen.getPrimary().getBounds().getWidth() - main.WINDOW_WIDTH);
-        stage.setY(100);
+        int[] pos = Config.getInstance().screen_position;
+        if(pos[0] < 0 ) pos[0] = (int)Screen.getPrimary().getBounds().getWidth() + pos[0];
+        if(pos[1] < 0 ) pos[1] = (int)Screen.getPrimary().getBounds().getWidth() + pos[1];
         // Create the scene on which everything appends to.
         scene = new Scene(w, main.WINDOW_WIDTH, main.WINDOW_HEIGHT, Color.WHEAT);
         stage.initStyle(StageStyle.TRANSPARENT); // Make the scene invisible.

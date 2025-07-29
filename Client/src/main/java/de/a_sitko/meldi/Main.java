@@ -106,7 +106,7 @@ public class Main extends Thread {
         param_name = System.getProperty("user.name");
         if (param_name == null) param_name = UUID.randomUUID().toString();
         // The UUID from Changeables
-        param_uuid = Changeables.USER_UUID;
+        param_uuid = Config.getInstance().user_id;
         // Set the three core params for the network api to register
         api.setUserID(param_device, param_name, param_uuid);
     }

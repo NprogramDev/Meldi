@@ -74,7 +74,7 @@ public class API {
      */
     public ConnectionType testServerConnection(){
         //Ask the server for the connection
-        String result = this.call(Changeables.BASE_URL,CONNECTION_TEST_PATH,EMPTY_PARAMS);
+        String result = this.call(Config.getInstance().domain, CONNECTION_TEST_PATH,EMPTY_PARAMS);
         //if not possible => ConnectionType.NO
         if(result == null) return ConnectionType.NO;
         //Split the csv list
@@ -109,7 +109,7 @@ public class API {
      * @return if it was successful and not null response
      */
     public boolean raise(boolean status){
-        return this.call(Changeables.BASE_URL,status ? RAISE : UNRAISE,currentParams) != null;
+        return this.call(Config.getInstance().domain, status ? RAISE : UNRAISE,currentParams) != null;
     }
 
     /**
@@ -117,7 +117,7 @@ public class API {
      * @return The position, if r < 0 => not on the list
      */
     public int fetchPosition(){
-        String rt = this.call(Changeables.BASE_URL,FETCH_POSITION,currentParams);
+        String rt = this.call(Config.getInstance().domain, FETCH_POSITION,currentParams);
         int position = -1;
         try {
             position = Integer.parseInt(rt.trim());
