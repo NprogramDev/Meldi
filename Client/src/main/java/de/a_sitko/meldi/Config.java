@@ -63,6 +63,6 @@ public class Config {
         value = value.replace("[","");
         value = value.replace("]","");
         String[] val = value.split(",");
-        return new int[]{Integer.parseInt(val[0]),Integer.parseInt(val[1])};
+        return new int[]{Integer.parseInt(val[0].trim()),Integer.parseInt(val[1].trim())};
     }
 }
