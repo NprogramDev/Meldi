@@ -11,6 +11,7 @@ import de.a_sitko.meldi.Main;
 import de.a_sitko.meldi.Texts;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,10 +26,12 @@ public class EditLine extends HBox implements ParentBox {
     private static final String SET_INFRONT_TEXT = "\uD83D\uDCCC";
     private static final String CLOSE_STATS_TEXT = "▼";
     private static final String OPEN_STATS_TEXT = "▲";
+    private static final String MOVE_SYMBOL = "⤧";
     //
     private Button exit;
     private Button pinOnWindow;
     private Button closeStates;
+    private Button moveButton;
     private boolean notOnTopState = false;
     private boolean statesShown = true;
     private Main main;
@@ -58,7 +61,13 @@ public class EditLine extends HBox implements ParentBox {
         // Setup the title for the window with it's style
         Label title = new Label(Texts.TITLE);
         setTitleStyle(title);
-
+        //
+        moveButton = new Button(MOVE_SYMBOL);
+        moveButton.setOnMousePressed((e)->{
+            this.main.startMove();
+        });
+        setWindowsButtonStyle(moveButton,"#00aaaa");
+        moveButton.setCursor(Cursor.MOVE);
         // Arange everything with the window size in mind
         closeStates.setMaxHeight(main.WINDOW_HEIGHT * 0.1);
         pinOnWindow.setMaxHeight(main.WINDOW_HEIGHT * 0.1);
@@ -67,13 +76,13 @@ public class EditLine extends HBox implements ParentBox {
         pinOnWindow.setMinWidth(main.WINDOW_WIDTH * 0.1);
         exit.setMinWidth(main.WINDOW_WIDTH * 0.1);
         title.setMinWidth(main.WINDOW_WIDTH * 0.5);
-
         // Update the visibility of the stats sync to the window
         Platform.runLater(()->{
             toggleStatsVisibility();
         });
         // Append everything
         append(title);
+        append(moveButton);
         append(closeStates);
         append(pinOnWindow);
         append(exit);
